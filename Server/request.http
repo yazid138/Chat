@@ -1,0 +1,39 @@
+### Create User
+POST http://localhost:5000/auth/register
+Content-Type: application/json
+
+{
+  "name": "Risa",
+  "username": "risa",
+  "password": "123"
+}
+
+### Login User
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "username": "yazid",
+  "password": "123"
+}
+
+### Logout User
+DELETE http://localhost:5000/auth/logout
+
+### Detail User
+GET http://localhost:5000/auth/detail
+
+### Crete Message
+POST http://localhost:5000/message/create
+Content-Type: application/json
+
+{
+  "receiver": 1,
+  "content": "halo arif"
+}
+
+### Get User Receiver
+GET http://localhost:5000/message/receivers
+
+### Get Message by User Id
+GET http://localhost:5000/message/1
