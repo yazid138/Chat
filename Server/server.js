@@ -92,7 +92,7 @@ io.on('connection', socket => {
                     }
                 }
             })
-            socket.to(roomName).emit('chat-message', message);
+            io.to(roomName).emit('chat-message', message);
             console.log(`Received message from ${socket.id} in room ${roomName}: ${message}`);
         }
     });
