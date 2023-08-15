@@ -18,6 +18,7 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {useForm} from "react-hook-form";
 import {socket} from "../socket.js";
+import {useNavigate} from "react-router-dom";
 
 const useStyles = makeStyles({
     table: {
@@ -42,7 +43,10 @@ const useStyles = makeStyles({
 const url = 'http://localhost:5000'
 
 const App = () => {
-    const user = localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"))
+    const navigate = useNavigate()
+    let user = localStorage.getItem("user")
+    if (!user) navigate('/login')
+    else user = JSON.parse(user)
     const [isConnected, setIsConnected] = useState(false)
     const [messages, setMessages] = useState([])
     const [selectedUser, setSelectedUser] = useState(-1)
