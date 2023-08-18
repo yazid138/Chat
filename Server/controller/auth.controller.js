@@ -47,8 +47,8 @@ const login = [
                 username,
             }
         })
-        const checkPassword = user.password && await bcrypt.compare(password, user.password)
-        if (!user || !checkPassword) {
+        const checkPassword = user ? await bcrypt.compare(password, user.password) : false
+        if (!checkPassword) {
             return res.status(400).json({
                 code: 400,
                 message: "gagal login",

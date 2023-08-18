@@ -1,3 +1,5 @@
+"use client"
+
 import {
     Avatar,
     Button,
@@ -6,13 +8,15 @@ import {
     Box,
     Grid,
     Typography,
-    Link
+    Link,
+    Alert,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {useForm} from "react-hook-form";
-import {useSession} from "../hooks/SessionHook.jsx";
+import {signIn} from 'next-auth/react'
+import {useState} from "react";
 
-function Copyright(props) {
+const Copyright = (props) => {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
@@ -25,16 +29,19 @@ function Copyright(props) {
     );
 }
 
-export default function Login() {
-    const {login, isLoading, error} = useSession()
-    const {register, handleSubmit} = useForm({
-        defaultValues: {
-            username: '',
-            password: ''
-        }
-    })
+const SignInPage = () => {
+    const [error, setError] = useState()
+    const {register, handleSubmit} = useForm()
 
-    const onSubmit = handleSubmit((data) => login(data));
+    const onSubmit = handleSubmit(async(data) => {
+        const result = await signIn('credentials', {
+            username: data.username,
+            password: data.password,
+            redirect: false,
+        })
+        if (result.error) setError(result.error)
+        else location.href = '/'
+    })
 
     return (
         <Grid container component="main" sx={{height: '100vh'}}>
@@ -66,7 +73,12 @@ export default function Login() {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <Box component="form" noValidate onSubmit={onSubmit} sx={{mt: 1}}>
+                    <Box component="form" method="POST" noValidate onSubmit={onSubmit} sx={{mt: 1}}>
+                        {error && (
+                            <Alert sx={{width: '100%'}} variant="filled" severity="error">
+                                {error}
+                            </Alert>
+                        )}
                         <TextField
                             {...register('username', {required: true})}
                             margin="normal"
@@ -98,7 +110,7 @@ export default function Login() {
                         <Grid container>
                             <Grid item>
                                 <Link variant="body2">
-                                        {"Don't have an account? Sign Up"}
+                                    {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
                         </Grid>
@@ -108,4 +120,6 @@ export default function Login() {
             </Grid>
         </Grid>
     );
-}
+};
+
+export default SignInPage;
