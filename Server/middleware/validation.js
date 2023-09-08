@@ -3,10 +3,10 @@ const Validator = require("fastest-validator");
 const validation = (schema, valueFrom) => (req, res, next) => {
     const v = new Validator();
     const check = v.compile(schema);
-    const validationError = check(req[valueFrom])
+    const validationError = check(valueFrom(req))
     if (validationError.length) {
         return res.status(400).json({
-            message: 'ada data yg tidak valid',
+            message: 'Validation Error',
             error: validationError
         })
     }

@@ -9,7 +9,7 @@ const create = [
             receiver: 'number',
             content: 'string',
         },
-        'body'
+        (req) => (req.body)
     ),
     async (req, res) => {
         const user = req.user
@@ -101,7 +101,7 @@ const getUserReceiver = async (req, res) => {
 }
 
 const getMessageByUser = [
-    checkId((req) => {
+    checkId('userMessage',(req) => {
         const {userId} = req.params
         const user = req.user
         return UserMessage.findOne({
@@ -118,7 +118,7 @@ const getMessageByUser = [
                 ]
             }
         })
-    }, 'userMessage'),
+    }),
     async (req, res) => {
         const userMessage = req['userMessage']
         let messages

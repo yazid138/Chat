@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const {User} = require('../database/model')
 
 const authVerify = async (req, res, next) => {
-    let token = req.cookies.token
+    let token = req.cookies.token || ''
     if (req.headers.authorization) {
         let [authType, token2] = req.headers.authorization.split(' ')
         if (authType === 'Bearer') token = token2
@@ -16,18 +16,18 @@ const authVerify = async (req, res, next) => {
                     exclude: ['password']
                 }
             })
-        } catch (error) {
+        } catch (err) {
             return res.status(500).json({
                 code: 500,
-                message: "terjadi error",
-                error
+                message: "Internal server error",
+                error: err.message
             })
         }
-    } catch (error) {
+    } catch (err) {
         return res.status(401).json({
             code: 401,
-            message: 'token tidak valid',
-            error
+            message: 'Unauthorized',
+            error: err.message
         })
     }
     next()

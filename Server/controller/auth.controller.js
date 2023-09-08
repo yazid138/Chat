@@ -11,10 +11,10 @@ const register = [
             username: 'string',
             password: 'string'
         },
-        'body'
+        (req) => (req.body)
     ),
     async (req, res) => {
-        let {password} = req.body
+        const {password} = req.body
         req.body.password = await bcrypt.hash(password, bcrypt.genSaltSync())
         try {
             await User.create(req.body)
@@ -38,7 +38,7 @@ const login = [
             username: 'string',
             password: 'string'
         },
-        'body'
+        (req) => (req.body)
     ),
     async (req, res) => {
         const {username, password} = req.body
